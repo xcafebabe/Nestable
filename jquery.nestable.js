@@ -50,7 +50,12 @@
             group           : 0,
             maxDepth        : 5,
             threshold       : 20,
-            reject          : []   
+            reject          : [],
+            //method for call when an item has been successfully dropped
+            //method has 2 arguments: id of moved item and id of new parent id
+            //it is very easy to make an AJAX request to web server to update
+            //those values in database. There are all required informations for that.
+            dropCallback    : null
         };
 
     function Plugin(element, options)
@@ -298,30 +303,47 @@
             el[0].parentNode.removeChild(el[0]);
             this.placeEl.replaceWith(el);
 
+// <<<<<<< HEAD
             var i;
             var isRejected = false;
-            for (i in this.options.reject) {
-              var reject = this.options.reject[i];
-              if (reject.rule.apply(this.dragRootEl)) {
-                var nestableDragEl = el.clone(true);
-                this.dragRootEl.html(this.nestableCopy.children().clone(true));
-                if (reject.action) {
-                  reject.action.apply(this.dragRootEl, [nestableDragEl]);
-                }
-                
-                isRejected = true;
-                break;
-              }
-            }
+            for (i in this.options.reject) 
+				{
+					var reject = this.options.reject[i];
+					if (reject.rule.apply(this.dragRootEl)) 
+					{
+						var nestableDragEl = el.clone(true);
+						this.dragRootEl.html(this.nestableCopy.children().clone(true));
+						if (reject.action) {
+                  	reject.action.apply(this.dragRootEl, [nestableDragEl]);
+                	}
+						
+                	isRejected = true;
+                	break;
+					}
+				}
             
-            if (!isRejected) {
-              this.el.trigger('change');
-              if (this.hasNewRoot) {
-                  this.dragRootEl.trigger('change');
-              }
-            }
-            this.dragEl.remove();
-            this.reset();
+				if (!isRejected) 
+				{
+	            this.dragEl.remove();
+	            this.el.trigger('change');
+
+	            //Let's find out new parent id
+	            var parentItem = el.parent().parent();
+	            var parentId = null;
+	            if(parentItem !== null && !parentItem.is('.' + this.options.rootClass))
+	                parentId = parentItem.data('id');
+
+	            if($.isFunction(this.options.dropCallback)) {
+	              this.options.dropCallback.call(this, el.data('id'), parentId);
+	            }
+
+	            if (this.hasNewRoot) {
+	                this.dragRootEl.trigger('change');
+	            }
+					
+	            this.dragEl.remove();
+	            this.reset();
+				}
         },
 
         dragMove: function(e)

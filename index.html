@@ -271,13 +271,19 @@ $(document).ready(function()
 
     // activate Nestable for list 1
     $('#nestable').nestable({
-        group: 1
+        group: 1,
+		  dropCallback: function(){
+			  alert('dropCallback');
+		  }
     })
     .on('change', updateOutput);
     
     // activate Nestable for list 2
     $('#nestable2').nestable({
-        group: 1
+        group: 1,
+		  dropCallback: function(){
+			  console.log('dropCallback');
+		  }
     })
     .on('change', updateOutput);
 
