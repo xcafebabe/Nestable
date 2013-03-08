@@ -52,9 +52,8 @@
             threshold       : 20,
             reject          : [],
             //method for call when an item has been successfully dropped
-            //method has 2 arguments: id of moved item and id of new parent id
-            //it is very easy to make an AJAX request to web server to update
-            //those values in database. There are all required informations for that.
+            //method has 1 argument in which sends an object containing all
+            //necessary details
             dropCallback    : null
         };
 
@@ -202,6 +201,7 @@
             this.dragDepth  = 0;
             this.hasNewRoot = false;
             this.pointEl    = null;
+            this.sourceRoot = null;
         },
 
         expandItem: function(li)
@@ -261,6 +261,7 @@
                 target   = $(e.target),
                 dragItem = target.closest('.' + this.options.handleClass).closest(this.options.itemNodeName);
 
+            this.sourceRoot = target.closest('.' + this.options.rootClass);
             this.placeEl.css('height', dragItem.height());
 
             mouse.offsetX = e.offsetX !== undefined ? e.offsetX : e.pageX - target.offset().left;
@@ -303,7 +304,6 @@
             el[0].parentNode.removeChild(el[0]);
             this.placeEl.replaceWith(el);
 
-// <<<<<<< HEAD
             var i;
             var isRejected = false;
             for (i in this.options.reject) 
@@ -333,15 +333,23 @@
 	            if(parentItem !== null && !parentItem.is('.' + this.options.rootClass))
 	                parentId = parentItem.data('id');
 
-	            if($.isFunction(this.options.dropCallback)) {
-	              this.options.dropCallback.call(this, el.data('id'), parentId);
+	            if($.isFunction(this.options.dropCallback))
+					{
+	              var details = {
+	                sourceId   : el.data('id'),
+	                destId     : parentId,
+	                sourceEl   : el,
+	                destParent : parentItem,
+	                destRoot   : el.closest('.' + this.options.rootClass),
+	                sourceRoot : this.sourceRoot
+	              };
+	              this.options.dropCallback.call(this, details);
 	            }
 
 	            if (this.hasNewRoot) {
 	                this.dragRootEl.trigger('change');
 	            }
 					
-	            this.dragEl.remove();
 	            this.reset();
 				}
         },
