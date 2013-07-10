@@ -230,6 +230,7 @@
             this.dragEl     = null;
             this.dragRootEl = null;
             this.dragDepth  = 0;
+            this.dragItem   = null;
             this.hasNewRoot = false;
             this.pointEl    = null;
             this.sourceRoot = null;
@@ -292,7 +293,12 @@
                 target   = $(e.target),
                 dragItem = target.closest('.' + this.options.handleClass).closest(this.options.itemNodeName);
 
+// <<<<<<< HEAD
             this.sourceRoot = target.closest('.' + this.options.rootClass);
+// =======
+            this.dragItem = dragItem;
+            
+// >>>>>>> a25c528... Add support for click event
             this.placeEl.css('height', dragItem.height());
 
             mouse.offsetX = e.offsetX !== undefined ? e.offsetX : e.pageX - target.offset().left;
@@ -334,6 +340,10 @@
             var el = this.dragEl.children(this.options.itemNodeName).first();
             el[0].parentNode.removeChild(el[0]);
             this.placeEl.replaceWith(el);
+            
+            if (!this.moving) {
+                $(this.dragItem).trigger('click');
+            }
 
             var i;
             var isRejected = false;
@@ -415,9 +425,9 @@
             var newAx   = Math.abs(mouse.distX) > Math.abs(mouse.distY) ? 1 : 0;
 
             // do nothing on first move
-            if (!mouse.moving) {
+            if (!this.moving) {
                 mouse.dirAx  = newAx;
-                mouse.moving = true;
+                this.moving = true;
                 return;
             }
 

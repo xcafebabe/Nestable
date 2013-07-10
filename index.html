@@ -294,6 +294,10 @@ $(document).ready(function()
     })
     .on('change', updateOutput);
     
+	 $('#nestable').find('.dd-item').on('click', function(){
+		 alert('test');
+	 });
+	 
     // activate Nestable for list 2
     $('#nestable2').nestable({
         group: 1,
