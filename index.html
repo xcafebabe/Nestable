@@ -152,6 +152,7 @@ p { line-height: 1.5em; }
     <menu id="nestable-menu">
         <button type="button" data-action="expand-all">Expand All</button>
         <button type="button" data-action="collapse-all">Collapse All</button>
+        <button type="button" data-action="destroy">Destroy</button>
     </menu>
 
     <div class="cf nestable-lists">
@@ -327,6 +328,9 @@ $(document).ready(function()
         }
         if (action === 'collapse-all') {
             $('.dd').nestable('collapseAll');
+        }
+        if (action === 'destroy') {
+            $('.dd').nestable('destroy');
         }
     });
 
