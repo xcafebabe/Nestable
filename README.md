@@ -111,8 +111,10 @@ These advanced config options are also available:
 
 * * *
 
-Author: David Bushell [http://dbushell.com](http://dbushell.com/) [@dbushell](http://twitter.com/dbushell/)
+**Author**   
+David Bushell [http://dbushell.com](http://dbushell.com/) [@dbushell](http://twitter.com/dbushell/)
 
-Contributor: Lukas Oppermann [http://vea.re](http://vea.re/) [@lukasoppermann](http://twitter.com/lukasoppermann/)
+**Contributor**   
+Lukas Oppermann [http://vea.re](http://vea.re/) [@lukasoppermann](http://twitter.com/lukasoppermann/)
 
 Copyright © 2012-2013 David Bushell | BSD & MIT license
