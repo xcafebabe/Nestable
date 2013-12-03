@@ -38,11 +38,11 @@ Write your nested HTML lists like so:
           </ol>
       </li>
   </ol>
-</div>````
+</div>```
 
 Then activate with jQuery like so:
 
-    $('.dd').nestable({ /* config options */ });
+```$('.dd').nestable({ /* config options */ });```
 
 ### Events
 
