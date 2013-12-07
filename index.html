@@ -287,14 +287,15 @@ $(document).ready(function()
     $('#nestable').nestable({
         group: 1,
 		  dropCallback: function(data){
-			  console.log('dropCallback: ');
-			  console.log(data);
-			  console.log('------------');
+			  // console.log('dropCallback: ');
+			  // console.log(data);
+			  // console.log('------------');
 		  }
     })
     .on('change', updateOutput);
     
-	 $('#nestable').find('.dd-item').on('click', function(){
+	 $('#nestable').find('.dd-handle').on('click', function(e){
+		 e.stopPropagation();
 		 alert('test');
 	 });
 	 
@@ -302,9 +303,9 @@ $(document).ready(function()
     $('#nestable2').nestable({
         group: 1,
 		  dropCallback: function(data){
-			  console.log('dropCallback: ');
-			  console.log(data);
-			  console.log('------------');
+			  // console.log('dropCallback: ');
+			  // console.log(data);
+			  // console.log('------------');
 		  }
     })
     .on('change', updateOutput);
@@ -313,9 +314,9 @@ $(document).ready(function()
     $('#nestable3').nestable({
         group: 1,
 		  dropCallback: function(data){
-			  console.log('dropCallback: ');
-			  console.log(data);
-			  console.log('------------');
+			  // console.log('dropCallback: ');
+			  // console.log(data);
+			  // console.log('------------');
 		  }
     });
 

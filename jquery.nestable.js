@@ -81,7 +81,8 @@
                 list.setParent($(el));
             });
 
-            list.el.on('click', 'button', function(e) {
+            list.el.on('click', 'button', function(e) 
+				{
                 if (list.dragEl || (!hasTouch && e.button !== 0)) {
                     return;
                 }
@@ -277,7 +278,14 @@
                 li.prepend($(this.options.expandBtnHTML));
                 li.prepend($(this.options.collapseBtnHTML));
             }
-            li.children('[data-action="expand"]').hide();
+				if( (' ' + li[0].className + ' ').indexOf(' ' + defaults.collapsedClass + ' ') > -1 )
+				{
+            	li.children('[data-action="collapse"]').hide();					
+				}
+				else
+				{
+            	li.children('[data-action="expand"]').hide();
+				}
         },
 
         unsetParent: function(li)
@@ -293,12 +301,10 @@
                 target   = $(e.target),
                 dragItem = target.closest('.' + this.options.handleClass).closest(this.options.itemNodeName);
 
-// <<<<<<< HEAD
             this.sourceRoot = target.closest('.' + this.options.rootClass);
-// =======
+
             this.dragItem = dragItem;
             
-// >>>>>>> a25c528... Add support for click event
             this.placeEl.css('height', dragItem.height());
 
             mouse.offsetX = e.offsetX !== undefined ? e.offsetX : e.pageX - target.offset().left;
@@ -341,10 +347,11 @@
             el[0].parentNode.removeChild(el[0]);
             this.placeEl.replaceWith(el);
             
-            if (!this.moving) {
-                $(this.dragItem).trigger('click');
+            if (!this.moving) 
+				{
+					$(this.dragItem).trigger('click');
             }
-
+				
             var i;
             var isRejected = false;
             for (i in this.options.reject) 
