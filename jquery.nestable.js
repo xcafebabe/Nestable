@@ -505,8 +505,8 @@
                     this.dragRootEl.append('<div class="' + opt.emptyClass + '"/>');
                 }
                 // parent root list has changed
+					 this.dragRootEl = pointElRoot;
                 if (isNewRoot) {
-                    this.dragRootEl = pointElRoot;
                     this.hasNewRoot = this.el[0] !== this.dragRootEl[0];
                 }
             }

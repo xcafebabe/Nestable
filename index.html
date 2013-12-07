@@ -206,6 +206,19 @@ p { line-height: 1.5em; }
                 </li>
             </ol>
         </div>
+        <div class="dd" id="nestable3">
+            <ol class="dd-list">
+                <li class="dd-item" data-id="17">
+                    <div class="dd-handle">Item 17</div>
+                </li>
+                <li class="dd-item" data-id="18">
+                    <div class="dd-handle">Item 18</div>
+                </li>
+                <li class="dd-item" data-id="19">
+                    <div class="dd-handle">Item 19</div>
+                </li>
+            </ol>
+        </div>
 
     </div>
 
@@ -290,6 +303,16 @@ $(document).ready(function()
 		  }
     })
     .on('change', updateOutput);
+	 
+    // activate Nestable for list 2
+    $('#nestable3').nestable({
+        group: 1,
+		  dropCallback: function(data){
+			  console.log('dropCallback: ');
+			  console.log(data);
+			  console.log('------------');
+		  }
+    });
 
     // output initial serialised data
     updateOutput($('#nestable').data('output', $('#nestable-output')));
