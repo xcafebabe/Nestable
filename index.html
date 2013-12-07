@@ -283,7 +283,7 @@ $(document).ready(function()
     // activate Nestable for list 2
     $('#nestable2').nestable({
         group: 1,
-		  dropCallback: function(){
+		  dropCallback: function(data){
 			  console.log('dropCallback: ');
 			  console.log(data);
 			  console.log('------------');
