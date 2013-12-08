@@ -201,11 +201,6 @@
             return data;
         },
 
-        serialise: function()
-        {
-            return this.serialize();
-        },
-
         reset: function()
         {
             this.mouse = {
