@@ -561,7 +561,9 @@
 
     };
 
-    $.fn.nestable = function(params)
+    // $.fn.nestable = function(params)
+	 // define fn for minified
+    MINI.M.prototype.nestable = function(params)
     {
         var lists  = this,
             retval = this;
