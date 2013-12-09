@@ -96,7 +96,7 @@ p { line-height: 1.5em; }
 }
 #nestable2 .dd-handle:hover { background: #bbb; }
 #nestable2 .dd-item > button:before { color: #fff; }
-#nestable3 .dd-item, #nestable3 .dd-placeholder{
+#nestable4 .dd-item, #nestable4 .dd-placeholder{
 	width: 48%;
 	margin: 5px;
 	float: left;
@@ -212,7 +212,7 @@ p { line-height: 1.5em; }
                 </li>
             </ol>
         </div>
-        <div class="dd" id="nestable3">
+        <div class="dd" id="nestable4">
             <ol class="dd-list">
                 <li class="dd-item" data-id="17">
                     <div class="dd-handle">Item 17</div>
@@ -335,7 +335,7 @@ $(document).ready(function()
     .on('change', updateOutput);
 	 
     // activate Nestable for list 2
-    $('#nestable3').nestable({
+    $('#nestable4').nestable({
 		  maxDepth: 1,
 		  dropCallback: function(data){
 			  // console.log('dropCallback: ');
