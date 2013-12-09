@@ -57,6 +57,18 @@ $('.dd').on('change', function() {
 });
 ```
 
+The `expand/collapse` event is fired when an item group is expanded or collapsed.
+
+```javascript
+$('.dd-item').on('expand', function() {
+	/* on expand event */
+});
+
+$('.dd-item').on('collapse', function() {
+	/* on collapse event */
+});
+```
+
 ### Methods
 
 You can get a serialised object with all `data-*` attributes for each item.
