@@ -307,6 +307,16 @@ $(document).ready(function()
 		  }
     })
     .on('change', updateOutput);
+	 
+	 $('#nestable').find('li').on('expand', function(e){
+		 console.log(e);
+		 e.stopPropagation();
+	 });
+	 
+	 $('#nestable').find('li').on('collapse', function(e){
+		 console.log(e);
+		 e.stopPropagation();
+	 });
     
 	 $('#nestable').find('.dd-handle').on('click', function(e){
 		 e.stopPropagation();
