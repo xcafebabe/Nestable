@@ -56,7 +56,7 @@
             //necessary details
             dropCallback    : null,
             scroll              : false,
-            scrollSensitivity   : 1,
+            scrollSensitivity   : 10,
             scrollSpeed         : 5,
             scrollTriggers      : {
                 top: 40,
@@ -445,11 +445,28 @@
                 this.moving = true;
                 return;
             }
-
             //Do scrolling
             if (opt.scroll) {
                 var scrolled = false;
-                var scrollParent = this.el.scrollParent()[0];
+                // var scrollParent = this.el.scrollParent()[0];
+				  /* ------------------------------
+				  // jquery scrollparent
+	 				scrollParent: function() {
+	 				                var scrollParent;
+	 				                if (($.ui.ie && (/(static|relative)/).test(this.css("position"))) || (/absolute/).test(this.css("position"))) {
+	 				                        scrollParent = this.parents().filter(function() {
+	 				                                return (/(relative|absolute|fixed)/).test($.css(this,"position")) && (/(auto|scroll)/).test($.css(this,"overflow")+$.css(this,"overflow-y")+$.css(this,"overflow-x"));
+	 				                        }).eq(0);
+	 				                } else {
+	 				                        scrollParent = this.parents().filter(function() {
+	 				                                return (/(auto|scroll)/).test($.css(this,"overflow")+$.css(this,"overflow-y")+$.css(this,"overflow-x"));
+	 				                        }).eq(0);
+	 				                }
+
+	 				                return ( /fixed/ ).test( this.css( "position") ) || !scrollParent.length ? $( this[ 0 ].ownerDocument || document ) : scrollParent;
+	 				        }
+					  // ------------------------------ */
+                var scrollParent = document;
                 if(scrollParent != document && scrollParent.tagName != 'HTML') {
                     if((opt.scrollTriggers.bottom + scrollParent.offsetHeight) - e.pageY < opt.scrollSensitivity)
                         scrollParent.scrollTop = scrolled = scrollParent.scrollTop + opt.scrollSpeed;
