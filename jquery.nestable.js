@@ -466,29 +466,44 @@
                                       return ( /fixed/ ).test( this.css( "position") ) || !scrollParent.length ? $( this[ 0 ].ownerDocument || document ) : scrollParent;
                               }
               // ------------------------------ */
-				  /* ------------------------------*/
-				  // jquery scrollparent
-				  	var scrollParentFn = function(_this) {
-				  		var scrollParent;
-				  		if ((/MSIE (\d+\.\d+);/.test(navigator.userAgent) && (/(static|relative)/).test(_this[0].style.position)) || (/absolute/).test(_this[0].style.position)) 
-				  		{
-				  			scrollParent = _this.parents().filter(function() 
-				  			{
-	 				      	return (/(relative|absolute|fixed)/).test(_this[0].style.position) && (/(auto|scroll)/).test(_this[0].style.overflow+_this[0].style.overflowY+_this[0].style.overflowX);
-	 				      });
-	 				   } else {
-	 				   	scrollParent = _this.parents().filter(function() 
-				  			{
-	 				      	return (/(auto|scroll)/).test(_this[0].style.overflow+_this[0].style.overflowY+_this[0].style.overflowX);
-	 				      });
-	 				   }
-						console.log(scrollParent);
-				  		return ( /fixed/ ).test( _this[0].style.position ) || (!scrollParent || !scrollParent.length) ? $( _this[ 0 ].ownerDocument || document ) : scrollParent;
+				  // scrollParent
+				  	var scrollParentFn = function(current, scrollParent) {
+						// this Style
+						var thisStyle = window.getComputedStyle(current);
+						// define testFn
+						var testFn = function(_this){
+							_this = window.getComputedStyle(_this);
+							return (/(auto|scroll)/).test(_this.overflow+_this.overflowY+_this.overflowX);
+						}
+						// redefine testFn if IE
+						if ((/MSIE (\d+\.\d+);/.test(navigator.userAgent) && (/(static|relative)/).test(thisStyle.position)) ||
+							(/absolute/).test(thisStyle.position)){
+							testFn = function(_this){
+								_this = window.getComputedStyle(_this);
+								return ((/(relative|absolute|fixed)/).test(_this.position) && (/(auto|scroll)/).test(_this.overflow+_this.overflowY+_this.overflowX));
+							}
+						}
+						// get scroll parent
+						while( scrollParent === undefined )
+						{
+							// set current item
+							current = current.parentNode;
+							// test
+							if(testFn(current))
+							{
+								scrollParent = current;
+							}
+							if( current === document )
+							{
+								scrollParent = document;
+							}
+						}
+						// return scrollParent
+				  		return ( /fixed/ ).test( thisStyle.position ) || !scrollParent ? ( current.ownerDocument || document ) : scrollParent;
 				  	};
 					 /* ------------------------------ */
 					 
-                var scrollParent = scrollParentFn(this.el);
-					 // console.log(scrollParent);
+                var scrollParent = scrollParentFn(this.el[0]);
                 if(scrollParent != document && scrollParent.tagName != 'HTML') {
                     if((opt.scrollTriggers.bottom + scrollParent.offsetHeight) - e.pageY < opt.scrollSensitivity)
                         scrollParent.scrollTop = scrolled = scrollParent.scrollTop + opt.scrollSpeed;
