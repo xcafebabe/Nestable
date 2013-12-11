@@ -447,26 +447,8 @@
             }
             //Do scrolling
             if (opt.scroll) {
-                var scrolled = false;
-                // var scrollParent = this.el.scrollParent()[0];
-          		/* ------------------------------
-               // jquery scrollparent
-                      scrollParent: function() {
-                                      var scrollParent;
-                                      if (($.ui.ie && (/(static|relative)/).test(this.css("position"))) || (/absolute/).test(this.css("position"))) {
-                                              scrollParent = this.parents().filter(function() {
-                                                      return (/(relative|absolute|fixed)/).test($.css(this,"position")) && (/(auto|scroll)/).test($.css(this,"overflow")+$.css(this,"overflow-y")+$.css(this,"overflow-x"));
-                                              }).eq(0);
-                                      } else {
-                                              scrollParent = this.parents().filter(function() {
-                                                      return (/(auto|scroll)/).test($.css(this,"overflow")+$.css(this,"overflow-y")+$.css(this,"overflow-x"));
-                                              }).eq(0);
-                                      }
-
-                                      return ( /fixed/ ).test( this.css( "position") ) || !scrollParent.length ? $( this[ 0 ].ownerDocument || document ) : scrollParent;
-                              }
-              // ------------------------------ */
-				  // scrollParent
+					var scrolled = false;
+				  	// scrollParent
 				  	var scrollParentFn = function(current, scrollParent) {
 						// this Style
 						var thisStyle = window.getComputedStyle(current);
@@ -489,11 +471,14 @@
 							// set current item
 							current = current.parentNode;
 							// test
-							if(testFn(current))
+							if( current !== document )
 							{
-								scrollParent = current;
+								if(testFn(current))
+								{
+									scrollParent = current;
+								}
 							}
-							if( current === document )
+							else
 							{
 								scrollParent = document;
 							}
@@ -502,9 +487,10 @@
 				  		return ( /fixed/ ).test( thisStyle.position ) || !scrollParent ? ( current.ownerDocument || document ) : scrollParent;
 				  	};
 					 /* ------------------------------ */
-					 
                 var scrollParent = scrollParentFn(this.el[0]);
-                if(scrollParent != document && scrollParent.tagName != 'HTML') {
+					 // scrollParent is element, not document
+					 if(scrollParent != document && scrollParent.tagName != 'HTML') 
+					 {
                     if((opt.scrollTriggers.bottom + scrollParent.offsetHeight) - e.pageY < opt.scrollSensitivity)
                         scrollParent.scrollTop = scrolled = scrollParent.scrollTop + opt.scrollSpeed;
                     else if(e.pageY - opt.scrollTriggers.top < opt.scrollSensitivity)
@@ -514,17 +500,27 @@
                         scrollParent.scrollLeft = scrolled = scrollParent.scrollLeft + opt.scrollSpeed;
                     else if(e.pageX - opt.scrollTriggers.left < opt.scrollSensitivity)
                         scrollParent.scrollLeft = scrolled = scrollParent.scrollLeft - opt.scrollSpeed;
-                } else {
-                    if(e.pageY - $(document).scrollTop() < opt.scrollSensitivity)
-                        scrolled = $(document).scrollTop($(document).scrollTop() - opt.scrollSpeed);
-                    else if($(window).height() - (e.pageY - $(document).scrollTop()) < opt.scrollSensitivity)
-                        scrolled = $(document).scrollTop($(document).scrollTop() + opt.scrollSpeed);
-
-                    if(e.pageX - $(document).scrollLeft() < opt.scrollSensitivity)
-                        scrolled = $(document).scrollLeft($(document).scrollLeft() - opt.scrollSpeed);
-                    else if($(window).width() - (e.pageX - $(document).scrollLeft()) < opt.scrollSensitivity)
-                        scrolled = $(document).scrollLeft($(document).scrollLeft() + opt.scrollSpeed);
-                }
+					// if scrollParent = document
+               } else {
+						// y axis
+						if(e.pageY - $(document).scrollTop() < opt.scrollSensitivity)
+						{
+							scrolled = $(document).scrollTop($(document).scrollTop() - opt.scrollSpeed);
+						}
+						else if($(window).height() - (e.pageY - $(document).scrollTop()) < opt.scrollSensitivity)
+						{
+							scrolled = $(document).scrollTop($(document).scrollTop() + opt.scrollSpeed);
+						}
+						// x axis
+						if(e.pageX - $(document).scrollLeft() < opt.scrollSensitivity)
+						{
+							scrolled = $(document).scrollLeft($(document).scrollLeft() - opt.scrollSpeed);
+						}
+						else if($(window).width() - (e.pageX - $(document).scrollLeft()) < opt.scrollSensitivity)
+						{
+							scrolled = $(document).scrollLeft($(document).scrollLeft() + opt.scrollSpeed);
+						}
+					}
             }
 
             if (this.scrollTimer)
