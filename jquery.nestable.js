@@ -577,11 +577,10 @@
 
             return (S4() + S4() + delim + S4() + delim + S4() + delim + S4() + delim + S4() + S4() + S4());
         };
-		  console.log(lists);
+
         lists.each(function(item, index)
         {
-            // var plugin = $(this).data("nestable");
-            var plugin = $(this).get("@data-nestable");
+            var plugin = $(item).get('%nestable');
             if (!plugin) {
                 $(this).data("nestable", new Plugin(this, params));
                 $(this).data("nestable-id", generateUid());
@@ -595,4 +594,4 @@
         return retval || lists;
     };
 
-})(window.jQuery || window.Zepto, window, document);
+})(window.jQuery || window.Zepto || MINI.$, window, document);
