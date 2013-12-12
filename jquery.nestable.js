@@ -85,6 +85,9 @@
             list.reset();
 
             // list.el.data('nestable-group', this.options.group);
+				// javascript (get set data attribute)
+				// string = element.dataset.camelCasedName;
+				// element.dataset.camelCasedName = string;
             list.el.set('%nestable-group', this.options.group);
 				
             // list.placeEl = $('<div class="' + list.options.placeClass + '"/>');
