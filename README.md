@@ -7,7 +7,7 @@ Nestable
 
 ### Drag & drop hierarchical list with mouse and touch compatibility
 
-[**Try Nestable Demo**](http://dbushell.github.com/Nestable/)
+[**Try Nestable Demo**](http://lukasoppermann.github.com/Nestable/)
 
 Nestable is an experimental example and not under active development. If it suits your requirements feel free to expand upon it!
 
@@ -119,7 +119,7 @@ These advanced config options are also available:
 * `destRoot` - contains destination group where element was dropped
 * `sourceRoot` - contains source group where element belonged to before user started dragging it
 
-**Inspect the [Nestable Demo](http://dbushell.github.com/Nestable/) for guidance.**
+**Inspect the [Nestable Demo](http://lukasoppermann.github.com/Nestable/) for guidance.**
 
 **Author**   
 David Bushell [http://dbushell.com](http://dbushell.com/) [@dbushell](http://twitter.com/dbushell/)
