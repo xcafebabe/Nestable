@@ -1,13 +1,11 @@
 Nestable
 ========
 
-## PLEASE NOTE
+## The plan
 
-**I cannot provide any support or guidance beyond this README. If this code helps you that's great but I have no plans to develop Nestable beyond this demo (it's not a final product and has limited functionality). I cannot reply to any requests for help.**
+**lukasoppermann:** I am working on making this plugin better (merged some very sensible pull-requests) and [minified.js](https://github.com/timjansen/minified.js) compatible. If I get it working I will try to remove even the minified requirement to have it be js only. But I am not sure if this is achievable with the time I can spend on it.
 
-* * *
-
-### Drag & drop hierarchical list with mouse and touch compatibility (jQuery / Zepto plugin)
+### Drag & drop hierarchical list with mouse and touch compatibility
 
 [**Try Nestable Demo**](http://dbushell.github.com/Nestable/)
 
