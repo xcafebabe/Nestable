@@ -56,25 +56,14 @@
             //necessary details
             dropCallback    : null
         };
-	
-		var extend = function(){
-			for(var i=1; i<arguments.length; i++){
-				for(var key in arguments[i]){
-					if(arguments[i].hasOwnProperty(key)){
-						arguments[0][key] = arguments[i][key];
-						return arguments[0];
-					}
-				}
-			}
-		};
-	
-		function Plugin(element, options)
-		{
-			this.w = $(document);
-			this.el = $(element);
-			this.options = extend({}, defaults, options);
-			this.init();
-		}
+
+    function Plugin(element, options)
+    {
+        this.w = $(document);
+        this.el = $(element);
+        this.options = $.extend({}, defaults, options);
+        this.init();
+    }
 
     Plugin.prototype = {
 
@@ -84,15 +73,10 @@
 
             list.reset();
 
-            // list.el.data('nestable-group', this.options.group);
-				// javascript (get set data attribute)
-				// string = element.dataset.camelCasedName;
-				// element.dataset.camelCasedName = string;
-            list.el.set('%nestable-group', this.options.group);
-				
-            // list.placeEl = $('<div class="' + list.options.placeClass + '"/>');
-            list.placeEl = EE('div', {'@class':list.options.placeClass});
-				
+            list.el.data('nestable-group', this.options.group);
+
+            list.placeEl = $('<div class="' + list.options.placeClass + '"/>');
+
             $.each(this.el.find(list.options.itemNodeName), function(k, el) {
                 list.setParent($(el));
             });
@@ -577,9 +561,7 @@
 
     };
 
-    // $.fn.nestable = function(params)
-	 // define fn for minified
-    MINI.M.prototype.nestable = function(params)
+    $.fn.nestable = function(params)
     {
         var lists  = this,
             retval = this;
@@ -594,15 +576,13 @@
             return (S4() + S4() + delim + S4() + delim + S4() + delim + S4() + delim + S4() + S4() + S4());
         };
 
-        lists.each(function(item, index)
+        lists.each(function()
         {
-            // var plugin = $(item).data('nestable');
-            var plugin = $(item).get('%nestable');
+            var plugin = $(this).data("nestable");
+
             if (!plugin) {
-               $(this).set("%nestable", new Plugin(this, params));
-               $(this).set("%nestable-id", generateUid());
-                // $(this).data("nestable", new Plugin(this, params));
-                // $(this).data("nestable-id", generateUid());
+                $(this).data("nestable", new Plugin(this, params));
+                $(this).data("nestable-id", generateUid());
             } else {
                 if (typeof params === 'string' && typeof plugin[params] === 'function') {
                     retval = plugin[params]();
@@ -613,4 +593,4 @@
         return retval || lists;
     };
 
-})(window.jQuery || window.Zepto || MINI.$, window, document);
+})(window.jQuery || window.Zepto, window, document);

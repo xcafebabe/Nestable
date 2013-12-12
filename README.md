@@ -1,7 +1,7 @@
 Nestable
 ========
 
-## PLEASE NOTE
+## The plan
 
 **lukasoppermann:** I am working on making this plugin better (merged some very sensible pull-requests) and [minified.js](https://github.com/timjansen/minified.js) compatible. If I get it working I will try to remove even the minified requirement to have it be js only. But I am not sure if this is achievable with the time I can spend on it.
 
