@@ -7,7 +7,7 @@ Nestable
 
 ### Drag & drop hierarchical list with mouse and touch compatibility
 
-[**Try Nestable Demo**](http://dbushell.github.com/Nestable/)
+[**Try Nestable Demo**](http://lukasoppermann.github.com/Nestable/)
 
 Nestable is an experimental example and not under active development. If it suits your requirements feel free to expand upon it!
 
