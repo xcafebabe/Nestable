@@ -56,14 +56,25 @@
             //necessary details
             dropCallback    : null
         };
-
-    function Plugin(element, options)
-    {
-        this.w = $(document);
-        this.el = $(element);
-        this.options = $.extend({}, defaults, options);
-        this.init();
-    }
+	
+		var extend = function(){
+			for(var i=1; i<arguments.length; i++){
+				for(var key in arguments[i]){
+					if(arguments[i].hasOwnProperty(key)){
+						arguments[0][key] = arguments[i][key];
+						return arguments[0];
+					}
+				}
+			}
+		};
+	
+		function Plugin(element, options)
+		{
+			this.w = $(document);
+			this.el = $(element);
+			this.options = extend({}, defaults, options);
+			this.init();
+		}
 
     Plugin.prototype = {
 
@@ -73,10 +84,12 @@
 
             list.reset();
 
-            list.el.data('nestable-group', this.options.group);
-
-            list.placeEl = $('<div class="' + list.options.placeClass + '"/>');
-
+            // list.el.data('nestable-group', this.options.group);
+            list.el.set('%nestable-group', this.options.group);
+				
+            // list.placeEl = $('<div class="' + list.options.placeClass + '"/>');
+            list.placeEl = EE('div', {'@class':list.options.placeClass});
+				
             $.each(this.el.find(list.options.itemNodeName), function(k, el) {
                 list.setParent($(el));
             });
@@ -580,10 +593,13 @@
 
         lists.each(function(item, index)
         {
+            // var plugin = $(item).data('nestable');
             var plugin = $(item).get('%nestable');
             if (!plugin) {
-                $(this).data("nestable", new Plugin(this, params));
-                $(this).data("nestable-id", generateUid());
+               $(this).set("%nestable", new Plugin(this, params));
+               $(this).set("%nestable-id", generateUid());
+                // $(this).data("nestable", new Plugin(this, params));
+                // $(this).data("nestable-id", generateUid());
             } else {
                 if (typeof params === 'string' && typeof plugin[params] === 'function') {
                     retval = plugin[params]();
