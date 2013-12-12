@@ -293,13 +293,13 @@ $(function()
 
     var updateOutput = function(e)
     {
-        var list   = e.length ? e : $(e.target),
-            output = list.data('output');
-        if (window.JSON) {
-            output.val(window.JSON.stringify(list.nestable('serialize')));//, null, 2));
-        } else {
-            output.val('JSON browser support required for this demo.');
-        }
+        // var list   = e.length ? e : $(e.target),
+        //     output = list.get('%output');
+        // if (window.JSON) {
+        //     // output.val(window.JSON.stringify(list.nestable('serialize')));
+        // } else {
+        //     output.val('JSON browser support required for this demo.');
+        // }
     };
 
     // activate Nestable for list 1
@@ -312,18 +312,18 @@ $(function()
 		  }
     })
     .on('change', updateOutput);
-	 
-	 $('#nestable').find('li').on('expand', function(e){
+
+	 $('#nestable').select('li', true).on('expand', function(e){
 		 console.log(e);
 		 e.stopPropagation();
 	 });
 	 
-	 $('#nestable').find('li').on('collapse', function(e){
+	 $('#nestable').select('li', true).on('collapse', function(e){
 		 console.log(e);
 		 e.stopPropagation();
 	 });
     
-	 $('#nestable').find('.dd-handle').on('click', function(e){
+	 $('#nestable').select('.dd-handle', true).on('click', function(e){
 		 e.stopPropagation();
 		 alert('test');
 	 });
@@ -350,13 +350,13 @@ $(function()
     });
 
     // output initial serialised data
-    updateOutput($('#nestable').data('output', $('#nestable-output')));
-    updateOutput($('#nestable2').data('output', $('#nestable2-output')));
+    updateOutput($('#nestable').set('%output', $('#nestable-output')));
+    updateOutput($('#nestable2').set('%output', $('#nestable2-output')));
 
     $('#nestable-menu').on('click', function(e)
     {
         var target = $(e.target),
-            action = target.data('action');
+            action = target.get('%action');
         if (action === 'expand-all') {
             $('.dd').nestable('expandAll');
         }
