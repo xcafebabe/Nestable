@@ -54,7 +54,10 @@
 		//method for call when an item has been successfully dropped
 		//method has 1 argument in which sends an object containing all
 		//necessary details
-		dropCallback    : null
+		dropCallback    : null,
+      // When a node is dragged it is moved to its new location.
+      // You can set the next option to true to create a copy of the node  that is dragged.
+      cloneDragNode: false
 	};
 
     function Plugin(element, options)
@@ -315,7 +318,11 @@
 
             // fix for zepto.js
             //dragItem.after(this.placeEl).detach().appendTo(this.dragEl);
-            dragItem.after(this.placeEl);
+            if(this.options.cloneDragNode) {
+                dragItem.after(dragItem.clone());
+            } else {
+                dragItem.after(this.placeEl);
+            }
             dragItem[0].parentNode.removeChild(dragItem[0]);
             dragItem.appendTo(this.dragEl);
 
@@ -497,7 +504,7 @@
             if (!hasPointerEvents) {
                 this.dragEl[0].style.visibility = 'hidden';
             }
-            this.pointEl = $(document.elementFromPoint(e.pageX - document.body.scrollLeft, e.pageY - (window.pageYOffset || document.documentElement.scrollTop)));
+            this.pointEl = $(document.elementFromPoint(e.pageX - document.documentElement.scrollLeft, e.pageY - (window.pageYOffset || document.documentElement.scrollTop)));
             if (!hasPointerEvents) {
                 this.dragEl[0].style.visibility = 'visible';
             }
