@@ -81,8 +81,8 @@
                 list.setParent($(el));
             });
 
-            list.el.on('click', 'button', function(e) 
-				{
+            list.el.on('click', 'button', function(e)
+            {
                 if (list.dragEl || (!hasTouch && e.button !== 0)) {
                     return;
                 }
@@ -100,9 +100,9 @@
             var onStartEvent = function(e)
             {
                 var handle = $(e.target);
-                
+
                 list.nestableCopy = handle.closest('.'+list.options.rootClass).clone(true);
-                
+
                 if (!handle.hasClass(list.options.handleClass)) {
                     if (handle.closest('.' + list.options.noDragClass).length) {
                         return;
@@ -160,11 +160,11 @@
                list.el.unbind('destroy-nestable');
 
                list.el.data("nestable", null);
-										
-					var buttons = list.el[0].getElementsByTagName('button');
-					
-					$(buttons).remove();
-					
+
+                    var buttons = list.el[0].getElementsByTagName('button');
+
+                    $(buttons).remove();
+
             };
 
             list.el.bind('destroy-nestable', destroyNestable);
@@ -173,7 +173,7 @@
         destroy: function ()
         {
             this.expandAll();
-				this.el.trigger('destroy-nestable');
+            this.el.trigger('destroy-nestable');
         },
 
         serialize: function()
@@ -238,8 +238,8 @@
             li.children('[data-action="expand"]').hide();
             li.children('[data-action="collapse"]').show();
             li.children(this.options.listNodeName).show();
-				this.el.trigger('expand', [li]);
-				li.trigger('expand');
+            this.el.trigger('expand', [li]);
+            li.trigger('expand');
         },
 
         collapseItem: function(li)
@@ -251,8 +251,8 @@
                 li.children('[data-action="expand"]').show();
                 li.children(this.options.listNodeName).hide();
             }
-				this.el.trigger('collapse', [li]);
-				li.trigger('collapse');
+            this.el.trigger('collapse', [li]);
+            li.trigger('collapse');
         },
 
         expandAll: function()
@@ -277,14 +277,12 @@
                 li.prepend($(this.options.expandBtnHTML));
                 li.prepend($(this.options.collapseBtnHTML));
             }
-				if( (' ' + li[0].className + ' ').indexOf(' ' + defaults.collapsedClass + ' ') > -1 )
-				{
-            	li.children('[data-action="collapse"]').hide();					
-				}
-				else
-				{
-            	li.children('[data-action="expand"]').hide();
-				}
+            if( (' ' + li[0].className + ' ').indexOf(' ' + defaults.collapsedClass + ' ') > -1 )
+            {
+                li.children('[data-action="collapse"]').hide();
+            } else {
+                li.children('[data-action="expand"]').hide();
+            }
         },
 
         unsetParent: function(li)
@@ -303,7 +301,7 @@
             this.sourceRoot = target.closest('.' + this.options.rootClass);
 
             this.dragItem = dragItem;
-            
+
             this.placeEl.css('height', dragItem.height());
 
             mouse.offsetX = e.offsetX !== undefined ? e.offsetX : e.pageX - target.offset().left;
@@ -345,60 +343,60 @@
             var el = this.dragEl.children(this.options.itemNodeName).first();
             el[0].parentNode.removeChild(el[0]);
             this.placeEl.replaceWith(el);
-            
-            if (!this.moving) 
-				{
-					$(this.dragItem).trigger('click');
+
+            if (!this.moving)
+                {
+                    $(this.dragItem).trigger('click');
             }
-				
+
             var i;
             var isRejected = false;
-            for (i in this.options.reject) 
-				{
-					var reject = this.options.reject[i];
-					if (reject.rule.apply(this.dragRootEl)) 
-					{
-						var nestableDragEl = el.clone(true);
-						this.dragRootEl.html(this.nestableCopy.children().clone(true));
-						if (reject.action) {
-                  	reject.action.apply(this.dragRootEl, [nestableDragEl]);
-                	}
-						
-                	isRejected = true;
-                	break;
-					}
-				}
-            
-				if (!isRejected) 
-				{
-	            this.dragEl.remove();
-	            this.el.trigger('change');
+            for (i in this.options.reject)
+            {
+                var reject = this.options.reject[i];
+                if (reject.rule.apply(this.dragRootEl))
+                {
+                    var nestableDragEl = el.clone(true);
+                    this.dragRootEl.html(this.nestableCopy.children().clone(true));
+                    if (reject.action) {
+                        reject.action.apply(this.dragRootEl, [nestableDragEl]);
+                    }
 
-	            //Let's find out new parent id
-	            var parentItem = el.parent().parent();
-	            var parentId = null;
-	            if(parentItem !== null && !parentItem.is('.' + this.options.rootClass))
-	                parentId = parentItem.data('id');
+                    isRejected = true;
+                    break;
+                }
+            }
 
-	            if($.isFunction(this.options.dropCallback))
-					{
-	              var details = {
-	                sourceId   : el.data('id'),
-	                destId     : parentId,
-	                sourceEl   : el,
-	                destParent : parentItem,
-	                destRoot   : el.closest('.' + this.options.rootClass),
-	                sourceRoot : this.sourceRoot
-	              };
-	              this.options.dropCallback.call(this, details);
-	            }
+            if (!isRejected)
+            {
+                this.dragEl.remove();
+                this.el.trigger('change');
 
-	            if (this.hasNewRoot) {
-	                this.dragRootEl.trigger('change');
-	            }
-					
-	            this.reset();
-				}
+                //Let's find out new parent id
+                var parentItem = el.parent().parent();
+                var parentId = null;
+                if(parentItem !== null && !parentItem.is('.' + this.options.rootClass))
+                    parentId = parentItem.data('id');
+
+                if($.isFunction(this.options.dropCallback))
+                {
+                    var details = {
+                        sourceId   : el.data('id'),
+                        destId     : parentId,
+                        sourceEl   : el,
+                        destParent : parentItem,
+                        destRoot   : el.closest('.' + this.options.rootClass),
+                        sourceRoot : this.sourceRoot
+                  };
+                  this.options.dropCallback.call(this, details);
+                }
+
+                if (this.hasNewRoot) {
+                    this.dragRootEl.trigger('change');
+                }
+
+                this.reset();
+            }
         },
 
         dragMove: function(e)
@@ -552,7 +550,7 @@
                     this.dragRootEl.append('<div class="' + opt.emptyClass + '"/>');
                 }
                 // parent root list has changed
-					 this.dragRootEl = pointElRoot;
+                     this.dragRootEl = pointElRoot;
                 if (isNewRoot) {
                     this.hasNewRoot = this.el[0] !== this.dragRootEl[0];
                 }
