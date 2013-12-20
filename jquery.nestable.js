@@ -57,7 +57,9 @@
 		dropCallback    : null,
       // When a node is dragged it is moved to its new location.
       // You can set the next option to true to create a copy of the node  that is dragged.
-      cloneDragNode: false
+      cloneNodeOnDrag   : false,
+      // When the node is dragged and released outside its list delete it.
+      dragOutsideToDelete : false
 	};
 
     function Plugin(element, options)
@@ -232,6 +234,7 @@
             this.hasNewRoot = false;
             this.pointEl    = null;
             this.sourceRoot = null;
+            this.isOutsideRoot = false;
         },
 
         expandItem: function(li)
@@ -318,7 +321,7 @@
 
             // fix for zepto.js
             //dragItem.after(this.placeEl).detach().appendTo(this.dragEl);
-            if(this.options.cloneDragNode) {
+            if(this.options.cloneNodeOnDrag) {
                 dragItem.after(dragItem.clone());
             } else {
                 dragItem.after(this.placeEl);
@@ -348,11 +351,24 @@
             //this.placeEl.replaceWith(this.dragEl.children(this.options.itemNodeName + ':first').detach());
             var el = this.dragEl.children(this.options.itemNodeName).first();
             el[0].parentNode.removeChild(el[0]);
-            this.placeEl.replaceWith(el);
+
+            if(this.isOutsideRoot && this.options.dragOutsideToDelete)
+				{
+                this.placeEl.remove();
+                // If all nodes where deleted, create a placeholder element.
+                if (!this.dragRootEl.find(this.options.itemNodeName).length)
+					 {
+                    this.dragRootEl.append('<div class="' + this.options.emptyClass + '"/>');
+                }
+            } 
+				else 
+				{
+                this.placeEl.replaceWith(el);
+            }
 
             if (!this.moving)
-                {
-                    $(this.dragItem).trigger('click');
+            {
+                $(this.dragItem).trigger('click');
             }
 
             var i;
@@ -504,7 +520,24 @@
             if (!hasPointerEvents) {
                 this.dragEl[0].style.visibility = 'hidden';
             }
+				
             this.pointEl = $(document.elementFromPoint(e.pageX - document.documentElement.scrollLeft, e.pageY - (window.pageYOffset || document.documentElement.scrollTop)));
+
+            // Check if the node is dragged outside of its list.
+            if(this.dragRootEl.has(this.pointEl).length) {
+                this.isOutsideRoot = false;
+                this.dragEl[0].style.opacity = 1;
+            } else {
+                this.isOutsideRoot = true;
+                this.dragEl[0].style.opacity = 0.5;
+            }
+
+            // find parent list of item under cursor
+            var pointElRoot = this.pointEl.closest('.' + opt.rootClass),
+                isNewRoot   = this.dragRootEl.data('nestable-id') !== pointElRoot.data('nestable-id');
+
+            this.isOutsideRoot = !pointElRoot.length;
+
             if (!hasPointerEvents) {
                 this.dragEl[0].style.visibility = 'visible';
             }
@@ -517,10 +550,6 @@
             else if (!this.pointEl.length || !this.pointEl.hasClass(opt.itemClass)) {
                 return;
             }
-
-            // find parent list of item under cursor
-            var pointElRoot = this.pointEl.closest('.' + opt.rootClass),
-                isNewRoot   = this.dragRootEl.data('nestable-id') !== pointElRoot.data('nestable-id');
 
             /**
              * move vertical
@@ -556,7 +585,7 @@
                     this.dragRootEl.append('<div class="' + opt.emptyClass + '"/>');
                 }
                 // parent root list has changed
-                     this.dragRootEl = pointElRoot;
+                this.dragRootEl = pointElRoot;
                 if (isNewRoot) {
                     this.hasNewRoot = this.el[0] !== this.dragRootEl[0];
                 }
