@@ -354,7 +354,11 @@
 
             if(this.isOutsideRoot && this.options.dragOutsideToDelete)
 				{
+                var parent = this.placeEl.parent();
                 this.placeEl.remove();
+                if (!parent.children().length) {
+                    this.unsetParent(parent.parent());
+                }
                 // If all nodes where deleted, create a placeholder element.
                 if (!this.dragRootEl.find(this.options.itemNodeName).length)
 					 {
