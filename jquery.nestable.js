@@ -27,35 +27,35 @@
         return !!supports;
     })();
 
-    var eStart  = hasTouch ? 'touchstart'  : 'mousedown',
-        eMove   = hasTouch ? 'touchmove'   : 'mousemove',
-        eEnd    = hasTouch ? 'touchend'    : 'mouseup',
-        eCancel = hasTouch ? 'touchcancel' : 'mouseup';
-
-    var defaults = {
-            listNodeName    : 'ol',
-            itemNodeName    : 'li',
-            rootClass       : 'dd',
-            listClass       : 'dd-list',
-            itemClass       : 'dd-item',
-            dragClass       : 'dd-dragel',
-            handleClass     : 'dd-handle',
-            collapsedClass  : 'dd-collapsed',
-            placeClass      : 'dd-placeholder',
-            noDragClass     : 'dd-nodrag',
-            noChildrenClass : 'dd-nochildren',
-            emptyClass      : 'dd-empty',
-            expandBtnHTML   : '<button data-action="expand" type="button">Expand</button>',
-            collapseBtnHTML : '<button data-action="collapse" type="button">Collapse</button>',
-            group           : 0,
-            maxDepth        : 5,
-            threshold       : 20,
-            reject          : [],
-            //method for call when an item has been successfully dropped
-            //method has 1 argument in which sends an object containing all
-            //necessary details
-            dropCallback    : null
-        };
+	var eStart  = hasTouch ? 'touchstart'  : 'mousedown',
+		 eMove   = hasTouch ? 'touchmove'   : 'mousemove',
+	  	 eEnd    = hasTouch ? 'touchend'    : 'mouseup',
+	  	 eCancel = hasTouch ? 'touchcancel' : 'mouseup';
+		  
+	var defaults = {
+		listNodeName    : 'ol',
+		itemNodeName    : 'li',
+		rootClass       : 'dd',
+		listClass       : 'dd-list',
+		itemClass       : 'dd-item',
+		dragClass       : 'dd-dragel',
+		handleClass     : 'dd-handle',
+		collapsedClass  : 'dd-collapsed',
+		placeClass      : 'dd-placeholder',
+		noDragClass     : 'dd-nodrag',
+		noChildrenClass : 'dd-nochildren',
+		emptyClass      : 'dd-empty',
+		expandBtnHTML   : '<button data-action="expand" type="button">Expand</button>',
+		collapseBtnHTML : '<button data-action="collapse" type="button">Collapse</button>',
+		group           : 0,
+		maxDepth        : 5,
+		threshold       : 20,
+		reject          : [],
+		//method for call when an item has been successfully dropped
+		//method has 1 argument in which sends an object containing all
+		//necessary details
+		dropCallback    : null
+	};
 
     function Plugin(element, options)
     {
@@ -145,26 +145,25 @@
 
             var destroyNestable = function()
             {
-               if (hasTouch) {
+                if (hasTouch) {
                     list.el[0].removeEventListener(eStart, onStartEvent, false);
                     window.removeEventListener(eMove, onMoveEvent, false);
                     window.removeEventListener(eEnd, onEndEvent, false);
                     window.removeEventListener(eCancel, onEndEvent, false);
-               } else {
+                } else {
                     list.el.off(eStart, onStartEvent);
                     list.w.off(eMove, onMoveEvent);
                     list.w.off(eEnd, onEndEvent);
-               }
+                }
 
-               list.el.off('click');
-               list.el.unbind('destroy-nestable');
+                list.el.off('click');
+                list.el.unbind('destroy-nestable');
 
-               list.el.data("nestable", null);
+                list.el.data("nestable", null);
 
-                    var buttons = list.el[0].getElementsByTagName('button');
+                var buttons = list.el[0].getElementsByTagName('button');
 
-                    $(buttons).remove();
-
+                $(buttons).remove();
             };
 
             list.el.bind('destroy-nestable', destroyNestable);
