@@ -30,7 +30,12 @@ p { line-height: 1.5em; }
  * Nestable
  */
 
-.dd { position: relative; display: block; margin: 0; padding: 0; max-width: 600px; list-style: none; font-size: 13px; line-height: 20px; }
+.dd { 
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	position: relative; display: block; margin: 0; padding: 0; max-width: 600px; list-style: none; font-size: 13px; line-height: 20px; }
 
 .dd-list { display: block; position: relative; margin: 0; padding: 0; list-style: none; }
 .dd-list .dd-list { padding-left: 30px; }
@@ -100,8 +105,11 @@ p { line-height: 1.5em; }
 	width: 48%;
 	margin: 5px;
 	float: left;
+	height: 50px;
 }
-
+#nestable4 .dd-item .dd-handle{
+	height: 100% !important;
+}
 @media only screen and (min-width: 700px) { 
 
     .dd { float: left; width: 48%; }
@@ -214,23 +222,23 @@ p { line-height: 1.5em; }
         </div>
         <div class="dd" id="nestable4">
             <ol class="dd-list">
-                <li class="dd-item" data-id="17">
-                    <div class="dd-handle">Item 17</div>
+                <li class="dd-item" data-id="20">
+                    <div class="dd-handle">Item 20</div>
                 </li>
-                <li class="dd-item" data-id="18">
-                    <div class="dd-handle">Item 18</div>
+                <li class="dd-item" data-id="21">
+                    <div class="dd-handle">Item 21</div>
                 </li>
-                <li class="dd-item" data-id="19">
-                    <div class="dd-handle">Item 19</div>
+                <li class="dd-item" data-id="22">
+                    <div class="dd-handle">Item 22</div>
                 </li>
-                <li class="dd-item" data-id="17">
-                    <div class="dd-handle">Item 17</div>
+                <li class="dd-item" data-id="23">
+                    <div class="dd-handle">Item 23</div>
                 </li>
-                <li class="dd-item" data-id="18">
-                    <div class="dd-handle">Item 18</div>
+                <li class="dd-item" data-id="24">
+                    <div class="dd-handle">Item 24</div>
                 </li>
-                <li class="dd-item" data-id="19">
-                    <div class="dd-handle">Item 19</div>
+                <li class="dd-item" data-id="25">
+                    <div class="dd-handle">Item 25</div>
                 </li>
             </ol>
         </div>
