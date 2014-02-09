@@ -280,97 +280,105 @@ p { line-height: 1.5em; }
     <p class="small">Copyright &copy; <a href="http://dbushell.com/">David Bushell</a> | Made for <a href="http://www.browserlondon.com/">Browser</a></p>
 
 <!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script> -->
-<script src="minified-3.1.js"></script>
+<!-- <script src="minified-3.1.js"></script>
 <script type="text/javascript" charset="utf-8">
 var MINI = require('minified'); 
 var $ = MINI.$, $$ = MINI.$$, EE = MINI.EE;
-</script>
+</script> -->
 <script src="jquery.nestable.js"></script>
 <script>
-
-$(function()
-{
-
-    var updateOutput = function(e)
-    {
-        // var list   = e.length ? e : $(e.target),
-        //     output = list.get('%output');
-        // if (window.JSON) {
-        //     // output.val(window.JSON.stringify(list.nestable('serialize')));
-        // } else {
-        //     output.val('JSON browser support required for this demo.');
-        // }
-    };
-
-    // activate Nestable for list 1
-    $('.dd').nestable({
-        group: 1,
-		  dropCallback: function(data){
-			  // console.log('dropCallback: ');
-			  // console.log(data);
-			  // console.log('------------');
-		  }
-    })
-    .on('change', updateOutput);
-
-	 $('#nestable').select('li', true).on('expand', function(e){
-		 console.log(e);
-		 e.stopPropagation();
-	 });
-	 
-	 $('#nestable').select('li', true).on('collapse', function(e){
-		 console.log(e);
-		 e.stopPropagation();
-	 });
-    
-	 $('#nestable').select('.dd-handle', true).on('click', function(e){
-		 e.stopPropagation();
-		 alert('test');
-	 });
-	 
-    // activate Nestable for list 2
-    $('#nestable2').nestable({
-        group: 1,
-		  dropCallback: function(data){
-			  // console.log('dropCallback: ');
-			  // console.log(data);
-			  // console.log('------------');
-		  }
-    })
-    .on('change', updateOutput);
-	 
-    // activate Nestable for list 2
-    $('#nestable4').nestable({
-		  maxDepth: 1,
-		  dropCallback: function(data){
-			  // console.log('dropCallback: ');
-			  // console.log(data);
-			  // console.log('------------');
-		  }
-    });
-
-    // output initial serialised data
-    updateOutput($('#nestable').set('%output', $('#nestable-output')));
-    updateOutput($('#nestable2').set('%output', $('#nestable2-output')));
-
-    $('#nestable-menu').on('click', function(e)
-    {
-        var target = $(e.target),
-            action = target.get('%action');
-        if (action === 'expand-all') {
-            $('.dd').nestable('expandAll');
-        }
-        if (action === 'collapse-all') {
-            $('.dd').nestable('collapseAll');
-        }
-        if (action === 'destroy') {
-            $('.dd').nestable('destroy');
-        }
-    });
-
-    $('#nestable3').nestable();
-
+nestable('#nestable4', {
+  maxDepth: 1,
+  dropCallback: function(data){
+	  // console.log('dropCallback: ');
+	  // console.log(data);
+	  // console.log('------------');
+  }
 });
+
+// $(function()
+// {
+// 
+//     var updateOutput = function(e)
+//     {
+//         // var list   = e.length ? e : $(e.target),
+//         //     output = list.get('%output');
+//         // if (window.JSON) {
+//         //     // output.val(window.JSON.stringify(list.nestable('serialize')));
+//         // } else {
+//         //     output.val('JSON browser support required for this demo.');
+//         // }
+//     };
+// 
+//     // activate Nestable for list 1
+//     $('.dd').nestable({
+//         group: 1,
+// 		  dropCallback: function(data){
+// 			  // console.log('dropCallback: ');
+// 			  // console.log(data);
+// 			  // console.log('------------');
+// 		  }
+//     })
+//     .on('change', updateOutput);
+// 
+// 	 $('#nestable').select('li', true).on('expand', function(e){
+// 		 console.log(e);
+// 		 e.stopPropagation();
+// 	 });
+// 	 
+// 	 $('#nestable').select('li', true).on('collapse', function(e){
+// 		 console.log(e);
+// 		 e.stopPropagation();
+// 	 });
+//     
+// 	 $('#nestable').select('.dd-handle', true).on('click', function(e){
+// 		 e.stopPropagation();
+// 		 alert('test');
+// 	 });
+// 	 
+//     // activate Nestable for list 2
+//     $('#nestable2').nestable({
+//         group: 1,
+// 		  dropCallback: function(data){
+// 			  // console.log('dropCallback: ');
+// 			  // console.log(data);
+// 			  // console.log('------------');
+// 		  }
+//     })
+//     .on('change', updateOutput);
+// 	 
+//     // activate Nestable for list 2
+//     $('#nestable4').nestable({
+// 		  maxDepth: 1,
+// 		  dropCallback: function(data){
+// 			  // console.log('dropCallback: ');
+// 			  // console.log(data);
+// 			  // console.log('------------');
+// 		  }
+//     });
+// 
+//     // output initial serialised data
+//     updateOutput($('#nestable').set('%output', $('#nestable-output')));
+//     updateOutput($('#nestable2').set('%output', $('#nestable2-output')));
+// 
+//     $('#nestable-menu').on('click', function(e)
+//     {
+//         var target = $(e.target),
+//             action = target.get('%action');
+//         if (action === 'expand-all') {
+//             $('.dd').nestable('expandAll');
+//         }
+//         if (action === 'collapse-all') {
+//             $('.dd').nestable('collapseAll');
+//         }
+//         if (action === 'destroy') {
+//             $('.dd').nestable('destroy');
+//         }
+//     });
+// 
+//     $('#nestable3').nestable();
+// 
+// });
 </script>
 </body>
 </html>

@@ -2,7 +2,8 @@
  * Nestable jQuery Plugin - Copyright (c) 2012 David Bushell - http://dbushell.com/
  * Dual-licensed under the BSD or MIT licenses
  */
-;(function($, window, document, undefined)
+var nestable;
+;(function(window, document, undefined)
 {
 	/* check for touch and change setup if needed */
     var hasTouch = 'ontouchstart' in window;
@@ -62,20 +63,100 @@
             threshold       : 20,
             reject          : [],
             dropCallback    : null,
-				fn					 : {
+				ffn				 : {
 					/* selector */
-					getById		 	: function(s){
+					getById: function(s){
 						return document.getElementById(s);
 					},
-					getByTag			: function(s, p){
+					getByTag: function(s, p){
 						
 					},
 					/* utility */
-					hasClass			: function(i, c){
+					// Add class to element
+					// IE8+
+					addClass: function( el, className)
+					{
+						if( className !== undefined && className.trim().length > 0 )
+						{
+							className = Array.prototype.slice.call (arguments, 1);
+							for (var i = className.length; i--;) 
+							{
+								className[i] = className[i].trim ().split (/\s*,\s*|\s+/);
+								for (var j = className[i].length; j--;)
+								{
+									if (el.classList)
+									{
+								  		el.classList.add(className[i][j]);
+									}
+									else
+									{
+								  		el.className += ' ' + className[i][j]
+									}
+								}
+							}
+						}
+					},
+					// Remove class from element
+					// IE8+
+					removeClass: function( el, className)
+					{
+						if( className !== undefined && className.trim().length > 0 )
+						{
+							className = Array.prototype.slice.call (arguments, 1);
+							for (var i = className.length; i--;) 
+							{
+								className[i] = className[i].trim ().split (/\s*,\s*|\s+/);
+								for (var j = className[i].length; j--;)
+								{
+									if (el.classList)
+									{
+									  el.classList.remove(className[i][j])
+									}
+									else
+									{
+										el.className = el.className.replace(new RegExp('(^| )' + className[i][j].split(' ').join('|') + '( |$)', 'gi'), ' ')
+									}
+								}
+							}
+						}
+					},
+					// Check if element has class
+					// IE8+
+					hasClass: function(el, className)
+					{
+						if (el.classList)
+						{
+							if(el.classList.contains(className))
+							{
+								return true;
+							}
+							return false;
+						}
+						else
+						{
+							if(new RegExp('(^| )' + className + '( |$)', 'gi').test(el.className) )
+							{
+								return true;
+							}
+							return false;
+						}
+					},
+					/* createElement */
+					createElement: function( ){
 						
 					},
+					// each
+					each: function( elements, fn )
+					{
+						if( typeof(elements) === 'string'){ 
+							elements = document.querySelectorAll(elements); 
+						}
+						Array.prototype.slice.call(elements,0).forEach(function(el, i){
+							fn(el);
+						});
+					},
 					/* extend fn */
-					extend			: function(){
+					extend: function(){
 						for(var i=0; i<arguments.length; i++){
 							for(var key in arguments[i]){
 								if(arguments[i].hasOwnProperty(key)){
@@ -123,9 +204,9 @@
 	
 		var Plugin = function(element, options)
 		{
-			this.w = $(document);
-			this.el = $(element);
-			this.options = defaults.fn.extend({}, defaults, options);
+			this.w = document;
+			this.el = element;
+			this.options = defaults.ffn.extend({}, defaults, options);
 			fn = this.options.fn;
 			this.init();
 		}
@@ -142,17 +223,17 @@
 				// javascript (get set data attribute)
 				// string = element.dataset.camelCasedName;
 				// element.dataset.camelCasedName = string;
-				list.el.set('%nestable-group', this.options.group);
-            // list.placeEl = $('<div class="' + list.options.placeClass + '"/>');
-            list.placeEl = EE('div', {'@class':list.options.placeClass});
+				list.el.setAttribute('data-nestable-group', this.options.group);
+            list.placeEl = document.createElement('div');
+				defaults.ffn.addClass(list.placeEl, list.options.placeClass);
 				
 				// list.el[0].querySelectorAll(list.options.itemNodeName)
 				// jquery this.el.find(list.options.itemNodeName)
-            each(list.el.select('list.options.itemNodeName', true), function(k, el) {
-                list.setParent($(el));
-            });
+            // each(list.el.select('list.options.itemNodeName', true), function(k, el) {
+            //     list.setParent($(el));
+            // });
 
-            list.el.on('click', 'button', function(e) 
+            list.el.addEventListener('click', 'button', function(e) 
 				{
                 if (list.dragEl || (!hasTouch && e.button !== 0)) {
                     return;
@@ -212,9 +293,9 @@
                 window.addEventListener(eEnd, onEndEvent, false);
                 window.addEventListener(eCancel, onEndEvent, false);
             } else {
-                list.el.on(eStart, onStartEvent);
-                list.w.on(eMove, onMoveEvent);
-                list.w.on(eEnd, onEndEvent);
+                list.el.addEventListener(eStart, onStartEvent);
+                list.w.addEventListener(eMove, onMoveEvent);
+                list.w.addEventListener(eEnd, onEndEvent);
             }
 
             var destroyNestable = function()
@@ -346,17 +427,17 @@
 
         setParent: function(li)
         {
-            if (li.children(this.options.listNodeName).length) {
-                li.prepend($(this.options.expandBtnHTML));
-                li.prepend($(this.options.collapseBtnHTML));
+            if (li[0].querySelectorAll(this.options.listNodeName).length) {
+                li[0].prepend($(this.options.expandBtnHTML));
+                li[0].prepend($(this.options.collapseBtnHTML));
             }
 				if( (' ' + li[0].className + ' ').indexOf(' ' + defaults.collapsedClass + ' ') > -1 )
 				{
-            	li.children('[data-action="collapse"]').hide();					
+            	li[0].children('[data-action="collapse"]').hide();					
 				}
 				else
 				{
-            	li.children('[data-action="expand"]').hide();
+            	li[0].children('[data-action="expand"]').hide();
 				}
         },
 
@@ -570,16 +651,18 @@
                     if (depth + this.dragDepth <= opt.maxDepth) {
                         // create new sub-level if one doesn't exist
                         if (!list.length) {
-                            // list = $('<' + opt.listNodeName + '/>').addClass(opt.listClass);
-                            list = EE(opt.listNodeName, {'class':opt.listClass});
-									 console.log("Check line 560ff");
-                            list.append(this.placeEl);
-                            prev.append(list);
+									 var docFrag = document.createDocumentFragment();
+                            list = document.createElement(opt.listNodeName);
+									 
+									 defaults.ffn.addClass(list, opt.listClass);
+                            
+									 list.appendChild(this.placeEl[0]);
+                            prev[0].appendChild(docFrag);
                             this.setParent(prev);
                         } else {
                             // else append to next level up
                             list = prev.children(opt.listNodeName).last();
-                            list.append(this.placeEl);
+                            list.appendChild(this.placeEl);
                         }
                     }
                 }
@@ -603,7 +686,7 @@
             if (!hasPointerEvents) {
                 this.dragEl[0].style.visibility = 'hidden';
             }
-            this.pointEl = $(document.elementFromPoint(e.pageX - document.body.scrollLeft, e.pageY - (window.pageYOffset || document.documentElement.scrollTop)));
+            this.pointEl = $(document.elementFromPoint(e.pageX - document.documentElement.scrollLeft, e.pageY - (window.pageYOffset || document.documentElement.scrollTop)));
             if (!hasPointerEvents) {
                 this.dragEl[0].style.visibility = 'visible';
             }
@@ -671,10 +754,10 @@
 
     // $.fn.nestable = function(params)
 	 // define fn for minified
-    MINI.M.prototype.nestable = function(params)
+	 nestable = function(el, params)
     {
-        var lists  = this,
-            retval = this;
+        var lists  = document.querySelectorAll(el),
+            retval = lists;
 
         var generateUid = function (separator) {
             var delim = separator || "-";
@@ -685,14 +768,14 @@
 
             return (S4() + S4() + delim + S4() + delim + S4() + delim + S4() + delim + S4() + S4() + S4());
         };
-
-        lists.each(function(item, index)
+		  defaults.ffn.each(lists, function(item)
         {
             // var plugin = $(item).data('nestable');
-            var plugin = $(item).get('%nestable');
+				console.log(item);
+            var plugin = item.getAttribute('data-nestable');
             if (!plugin) {
-               $(item).set("%nestable", new Plugin($(item), params));
-               $(item).set("%nestable-id", generateUid());
+               item.setAttribute("data-nestable", new Plugin(item, params));
+               item.setAttribute("data-nestable-id", generateUid());
                 // $(this).data("nestable", new Plugin(this, params));
                 // $(this).data("nestable-id", generateUid());
             } else {
@@ -705,4 +788,4 @@
         return retval || lists;
     };
 
-})(window.jQuery || window.Zepto || MINI.$, window, document);
+})(window, document);
