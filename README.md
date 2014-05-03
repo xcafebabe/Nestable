@@ -1,13 +1,13 @@
 Nestable
 ========
 
-## The plan
 
-**lukasoppermann:** I am working on making this plugin better (merged some very sensible pull-requests) and [minified.js](https://github.com/timjansen/minified.js) compatible. If I get it working I will try to remove even the minified requirement to have it be js only. But I am not sure if this is achievable with the time I can spend on it.
+## Changes from the forked repository
 
-### Drag & drop hierarchical list with mouse and touch compatibility
+### 03-05-2014
 
-[**Try Nestable Demo**](http://lukasoppermann.github.com/Nestable/)
+  * Avoid not-needed deep copy of the whole tree if there is no `reject` option
+  * Allow delayed start of reordering (via tap-n-hold), using `startDelayMsec` option
 
 Nestable is an experimental example and not under active development. If it suits your requirements feel free to expand upon it!
 
@@ -109,6 +109,7 @@ These advanced config options are also available:
 * `expandBtnHTML` The HTML text used to generate a list item expand button (default `'<button data-action="expand">Expand></button>'`)
 * `collapseBtnHTML` The HTML text used to generate a list item collapse button (default `'<button data-action="collapse">Collapse</button>'`)
 * `dropCallback` The callback method which is called when an item has been successfully moved. It has 1 argument: object with all details (default `null`)
+* `startDelayMsec` The timeout to start D-n-D operation after touching on the target, allows Tap-and-hold implementation (default `0`)
 
 `dropCallback` details object:
 
@@ -124,7 +125,8 @@ These advanced config options are also available:
 **Author**   
 David Bushell [http://dbushell.com](http://dbushell.com/) [@dbushell](http://twitter.com/dbushell/)
 
-**Contributor**   
+**Contributors**
 Lukas Oppermann [http://vea.re](http://vea.re/) [@lukasoppermann](http://twitter.com/lukasoppermann/)
+Kirill Maximov [@maxkir](http://twitter.com/maxkir/)
 
 Copyright © 2012-2013 David Bushell | BSD & MIT license

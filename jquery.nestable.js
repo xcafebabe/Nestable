@@ -50,6 +50,11 @@
 		maxDepth        : 5,
 		threshold       : 20,
 
+        /**
+         * Allows to start DnD operation on Tap-and-hold action, not immediately
+         */
+        startDelayMsec  : 0,
+
 		reject          : [],
 		//method for call when an item has been successfully dropped
 		//method has 1 argument in which sends an object containing all
@@ -102,6 +107,30 @@
                 }
             });
 
+            // Used when DnD is delayed
+            var delayedDragStarter = {
+                init: function(e) {
+                    this.cleanup();
+
+                    this.startE = e;
+                    this.timeout = setTimeout(function() {
+                        list.dragStart(e);
+                    }, list.options.startDelayMsec)
+                },
+
+                isBigMove: function(e) {
+                    return this.startE &&
+                        (Math.abs(this.startE.pageX - e.pageX) +
+                        Math.abs(this.startE.pageY - e.pageY)) > 40;
+                },
+
+                cleanup: function() {
+                    this.startE = null;
+                    clearTimeout(this.timeout);
+                }
+            };
+
+
             var onStartEvent = function(e)
             {
                 var handle = $(e.target);
@@ -119,15 +148,29 @@
                 if (!handle.length || list.dragEl || (!hasTouch && e.which !== 1) || (hasTouch && e.touches.length !== 1)) {
                     return;
                 }
-                e.preventDefault();
-                list.dragStart(hasTouch ? e.touches[0] : e);
+
+                var touchObject = hasTouch ? e.touches[0] : e;
+
+                if (list.options.startDelayMsec) {
+                    delayedDragStarter.init(touchObject);
+                }
+                else {
+                    e.preventDefault();
+                    list.dragStart(touchObject);
+                }
             };
 
             var onMoveEvent = function(e)
             {
+                var touchObject = hasTouch ? e.touches[0] : e;
                 if (list.dragEl) {
                     e.preventDefault();
-                    list.dragMove(hasTouch ? e.touches[0] : e);
+                    list.dragMove(touchObject);
+                }
+                else {
+                    if (delayedDragStarter.isBigMove(touchObject)) {
+                        delayedDragStarter.cleanup();
+                    }
                 }
             };
 
@@ -137,6 +180,7 @@
                     e.preventDefault();
                     list.dragStop(hasTouch ? e.touches[0] : e);
                 }
+                delayedDragStarter.cleanup();
             };
 
             if (hasTouch) {
@@ -152,6 +196,8 @@
 
             var destroyNestable = function()
             {
+                delayedDragStarter.cleanup();
+
                 if (hasTouch) {
                     list.el[0].removeEventListener(eStart, onStartEvent, false);
                     window.removeEventListener(eMove, onMoveEvent, false);
