@@ -5,7 +5,6 @@
 ;(function($, window, document, undefined)
 {
     var hasTouch = 'ontouchstart' in window;
-    var nestableCopy;
 
     /**
      * Detect CSS pointer-events property
@@ -50,6 +49,7 @@
 		group           : 0,
 		maxDepth        : 5,
 		threshold       : 20,
+
 		reject          : [],
 		//method for call when an item has been successfully dropped
 		//method has 1 argument in which sends an object containing all
@@ -106,7 +106,9 @@
             {
                 var handle = $(e.target);
 
-                list.nestableCopy = handle.closest('.'+list.options.rootClass).clone(true);
+                if (list.options.reject.length > 0) {
+                    list.nestableCopy = handle.closest('.'+list.options.rootClass).clone(true);
+                }
 
                 if (!handle.hasClass(list.options.handleClass)) {
                     if (handle.closest('.' + list.options.noDragClass).length) {
@@ -377,7 +379,8 @@
 
             var i;
             var isRejected = false;
-            for (i in this.options.reject)
+
+            for (i = 0; i < this.options.reject.length; i ++)
             {
                 var reject = this.options.reject[i];
                 if (reject.rule.apply(this.dragRootEl))
