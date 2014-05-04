@@ -109,23 +109,24 @@
 
             // Used when DnD is delayed
             var delayedDragStarter = {
-                init: function(e) {
+                init: function(event, touch) {
                     this.cleanup();
 
-                    this.startE = e;
+                    this.startTouch = touch;
                     this.timeout = setTimeout(function() {
-                        list.dragStart(e);
+                        event.preventDefault();
+                        list.dragStart(touch);
                     }, list.options.startDelayMsec)
                 },
 
-                isBigMove: function(e) {
-                    return this.startE &&
-                        (Math.abs(this.startE.pageX - e.pageX) +
-                        Math.abs(this.startE.pageY - e.pageY)) > 40;
+                isBigMove: function(touch) {
+                    return this.startTouch &&
+                        (Math.abs(this.startTouch.pageX - touch.pageX) +
+                        Math.abs(this.startTouch.pageY - touch.pageY)) > 40;
                 },
 
                 cleanup: function() {
-                    this.startE = null;
+                    this.startTouch = null;
                     clearTimeout(this.timeout);
                 }
             };
@@ -152,7 +153,7 @@
                 var touchObject = hasTouch ? e.touches[0] : e;
 
                 if (list.options.startDelayMsec) {
-                    delayedDragStarter.init(touchObject);
+                    delayedDragStarter.init(e, touchObject);
                 }
                 else {
                     e.preventDefault();
