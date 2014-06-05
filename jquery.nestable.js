@@ -111,6 +111,7 @@
             var delayedDragStarter = {
                 init: function(event, touch) {
                     this.cleanup();
+                    if (event.ctrlKey) return;
 
                     this.startTouch = touch;
                     this.timeout = setTimeout(function() {
