@@ -9,6 +9,10 @@ Nestable
   * Avoid not-needed deep copy of the whole tree if there is no `reject` option
   * Allow delayed start of reordering (via tap-n-hold), using `startDelayMsec` option
 
+### 14-06-2014
+
+  * Allow disabling start of D-n-D using callback option `beforeStartCallback`. This is a callback function, which can explicitly return `false` to avoid reordering start
+
 Nestable is an experimental example and not under active development. If it suits your requirements feel free to expand upon it!
 
 ## Usage
@@ -110,6 +114,7 @@ These advanced config options are also available:
 * `collapseBtnHTML` The HTML text used to generate a list item collapse button (default `'<button data-action="collapse">Collapse</button>'`)
 * `dropCallback` The callback method which is called when an item has been successfully moved. It has 1 argument: object with all details (default `null`)
 * `startDelayMsec` The timeout to start D-n-D operation after touching on the target, allows Tap-and-hold implementation (default `0`)
+* `beforeStartCallback` This is a callback function, which can explicitly return `false` to avoid reordering start
 
 `dropCallback` details object:
 

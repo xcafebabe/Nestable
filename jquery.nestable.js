@@ -55,6 +55,12 @@
          */
         startDelayMsec  : 0,
 
+        /**
+         * @type {?Function} This is a callback function, which can explicitly return false to avoid reordering start
+         */
+        beforeStartCallback: null,
+
+
 		reject          : [],
 		//method for call when an item has been successfully dropped
 		//method has 1 argument in which sends an object containing all
@@ -149,6 +155,11 @@
                 }
                 if (!handle.length || list.dragEl || (!hasTouch && e.which !== 1) || (hasTouch && e.touches.length !== 1)) {
                     return;
+                }
+
+                if (typeof list.options.beforeStartCallback === 'function') {
+                    if (false === list.options.beforeStartCallback.call(list, e))
+                        return;
                 }
 
                 var touchObject = hasTouch ? e.touches[0] : e;
