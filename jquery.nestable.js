@@ -56,9 +56,14 @@
         startDelayMsec  : 0,
 
         /**
-         * @type {?Function} This is a callback function, which can explicitly return false to avoid reordering start
+         * {Function} This is a callback function, which can explicitly return false to avoid reordering start
          */
         beforeStartCallback: null,
+
+        /**
+         * {Function} This function is called when user tries to move a node under a collapsed node - so it allows to call external callback to expand the node
+         */
+        expandIfNeededCallback: null,
 
 
 		reject          : [],
@@ -514,7 +519,8 @@
             mouse.dirX = mouse.distX === 0 ? 0 : mouse.distX > 0 ? 1 : -1;
             mouse.dirY = mouse.distY === 0 ? 0 : mouse.distY > 0 ? 1 : -1;
             // axis mouse is now moving on
-            var newAx   = Math.abs(mouse.distX) > Math.abs(mouse.distY) ? 1 : 0;
+            var diff    = Math.abs(mouse.distX) - Math.abs(mouse.distY);
+            var newAx   = diff > 0 ? 1 : 0;
 
             // do nothing on first move
             if (!this.moving) {
@@ -524,7 +530,7 @@
             }
 
             // calc distance moved on this axis (and direction)
-            if (mouse.dirAx !== newAx) {
+            if (mouse.dirAx !== newAx && Math.abs(diff) > 5) {
                 mouse.distAxX = 0;
                 mouse.distAxY = 0;
             } else {
@@ -546,10 +552,17 @@
                 // reset move distance on x-axis for new phase
                 mouse.distAxX = 0;
                 prev = this.placeEl.prev(opt.itemNodeName);
+
+                // Expand node if needed:
+                if (mouse.distX > 0 && prev.length && this.options.expandIfNeededCallback) {
+                    this.options.expandIfNeededCallback(prev);
+                }
+
                 // increase horizontal level if previous sibling exists and is not collapsed
                 if (mouse.distX > 0 && prev.length && !prev.hasClass(opt.collapsedClass) && !prev.hasClass(opt.noChildrenClass)) {
                     // cannot increase level when item above is collapsed
-                    list = prev.find(opt.listNodeName).last();
+                    list = prev.children(opt.listNodeName).last();
+//                    console.info(prev, list)
                     // check if depth limit has reached
                     depth = this.placeEl.parents(opt.listNodeName).length;
                     if (depth + this.dragDepth <= opt.maxDepth) {
