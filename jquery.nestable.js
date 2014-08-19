@@ -421,7 +421,9 @@
             // fix for zepto.js
             //this.placeEl.replaceWith(this.dragEl.children(this.options.itemNodeName + ':first').detach());
             var el = this.dragEl.children(this.options.itemNodeName).first();
-            el[0].parentNode.removeChild(el[0]);
+            if (el[0] && el[0].parentNode) {
+                el[0].parentNode.removeChild(el[0]);
+            }
 
             if(this.isOutsideRoot && this.options.dragOutsideToDelete)
 				{
