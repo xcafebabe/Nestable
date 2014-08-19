@@ -369,6 +369,11 @@
                 target   = $(e.target),
                 dragItem = target.closest('.' + this.options.handleClass).closest(this.options.itemNodeName);
 
+            if (dragItem.length != 1 || !dragItem[0].parentNode) {
+                // Could happen when drag starting is delayed
+                return;
+            }
+
             this.sourceRoot = target.closest('.' + this.options.rootClass);
 
             this.dragItem = dragItem;
