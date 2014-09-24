@@ -4,7 +4,7 @@
  */
 ;(function($, window, document, undefined)
 {
-    var hasTouch = 'ontouchstart' in window;
+    var hasTouch = 'ontouchstart' in document;
 
     /**
      * Detect CSS pointer-events property
@@ -30,7 +30,7 @@
 		 eMove   = hasTouch ? 'touchmove'   : 'mousemove',
 	  	 eEnd    = hasTouch ? 'touchend'    : 'mouseup',
 	  	 eCancel = hasTouch ? 'touchcancel' : 'mouseup';
-		  
+
 	var defaults = {
 		listNodeName    : 'ol',
 		itemNodeName    : 'li',
@@ -128,7 +128,7 @@
                     this.timeout = setTimeout(function() {
                         event.preventDefault();
                         list.dragStart(touch);
-                    }, list.options.startDelayMsec)
+                    }, list.options.startDelayMsec);
                 },
 
                 isBigMove: function(touch) {
@@ -158,6 +158,7 @@
                     }
                     handle = handle.closest('.' + list.options.handleClass);
                 }
+
                 if (!handle.length || list.dragEl || (!hasTouch && e.which !== 1) || (hasTouch && e.touches.length !== 1)) {
                     return;
                 }
@@ -397,6 +398,7 @@
             } else {
                 dragItem.after(this.placeEl);
             }
+
             dragItem[0].parentNode.removeChild(dragItem[0]);
             dragItem.appendTo(this.dragEl);
 
@@ -418,6 +420,7 @@
 
         dragStop: function(e)
         {
+
             // fix for zepto.js
             //this.placeEl.replaceWith(this.dragEl.children(this.options.itemNodeName + ':first').detach());
             var el = this.dragEl.children(this.options.itemNodeName).first();
@@ -426,7 +429,7 @@
             }
 
             if(this.isOutsideRoot && this.options.dragOutsideToDelete)
-				{
+                {
                 var parent = this.placeEl.parent();
                 this.placeEl.remove();
                 if (!parent.children().length) {
@@ -434,12 +437,12 @@
                 }
                 // If all nodes where deleted, create a placeholder element.
                 if (!this.dragRootEl.find(this.options.itemNodeName).length)
-					 {
+                     {
                     this.dragRootEl.append('<div class="' + this.options.emptyClass + '"/>');
                 }
-            } 
-				else 
-				{
+            }
+                else
+                {
                 this.placeEl.replaceWith(el);
             }
 
@@ -606,7 +609,7 @@
             if (!hasPointerEvents) {
                 this.dragEl[0].style.visibility = 'hidden';
             }
-				
+
             this.pointEl = $(document.elementFromPoint(e.pageX - document.documentElement.scrollLeft, e.pageY - (window.pageYOffset || document.documentElement.scrollTop)));
 
             // Check if the node is dragged outside of its list.
