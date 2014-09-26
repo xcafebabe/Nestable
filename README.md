@@ -4,6 +4,10 @@ Nestable
 
 ## Changes from the forked repository
 
+### 26-09-2014
+  * Add expand / collapse callback methods
+  * Minor changes to fulfill jslint standard validation rules
+
 ### 15-06-2014
 
   * Add callback `expandIfNeededCallback` which is called when user tries to move a node under a collapsed node - so it allows to call external callback to expand the node
@@ -118,6 +122,8 @@ These advanced config options are also available:
 * `expandBtnHTML` The HTML text used to generate a list item expand button (default `'<button data-action="expand">Expand></button>'`)
 * `collapseBtnHTML` The HTML text used to generate a list item collapse button (default `'<button data-action="collapse">Collapse</button>'`)
 * `dropCallback` The callback method which is called when an item has been successfully moved. It has 1 argument: object with all details (default `null`)
+* `expandCallback` The callback method which is called when expand button is clicked in any item. It has 1 argument: object with details about item (default `null`)
+* `collapseCallback` The callback method which is called when collapse button is clicked in any item. It has 1 argument: object with details about item (default `null`)
 
 * `startDelayMsec` The timeout to start D-n-D operation after touching on the target, allows Tap-and-hold implementation (default `0`)
 * `beforeStartCallback` This is a callback function, which can explicitly return `false` to avoid reordering start
@@ -136,7 +142,7 @@ These advanced config options are also available:
 
 **Inspect the [Nestable Demo](http://lukasoppermann.github.com/Nestable/) for guidance.**
 
-**Author**   
+**Author**
 David Bushell [http://dbushell.com](http://dbushell.com/) [@dbushell](http://twitter.com/dbushell/)
 
 **Contributors**
