@@ -66,17 +66,19 @@
         expandIfNeededCallback: null,
 
 
-		reject          : [],
-		//method for call when an item has been successfully dropped
-		//method has 1 argument in which sends an object containing all
-		//necessary details
-		dropCallback    : null,
-      // When a node is dragged it is moved to its new location.
-      // You can set the next option to true to create a copy of the node  that is dragged.
-      cloneNodeOnDrag   : false,
-      // When the node is dragged and released outside its list delete it.
-      dragOutsideToDelete : false
-	};
+    reject          : [],
+    //method for call when an item has been successfully dropped
+    //method has 1 argument in which sends an object containing all
+    //necessary details
+    dropCallback    : null,
+    // When a node is dragged it is moved to its new location.
+    // You can set the next option to true to create a copy of the node  that is dragged.
+    cloneNodeOnDrag   : false,
+    // When the node is dragged and released outside its list delete it.
+    dragOutsideToDelete : false,
+    //To be able to attach a generic callback function.
+    expandCallback : null
+  };
 
     function Plugin(element, options)
     {
@@ -312,6 +314,15 @@
             li.children(this.options.listNodeName).show();
             this.el.trigger('expand', [li]);
             li.trigger('expand');
+
+            if($.isFunction(this.options.expandCallback))
+            {
+                var details = {
+                    sourceEl : li,
+                    sourceId : li.data('id'),
+            };
+                this.options.expandCallback.call(this, details);
+            }
         },
 
         collapseItem: function(li)
@@ -429,7 +440,7 @@
             }
 
             if(this.isOutsideRoot && this.options.dragOutsideToDelete)
-                {
+        {
                 var parent = this.placeEl.parent();
                 this.placeEl.remove();
                 if (!parent.children().length) {
@@ -437,12 +448,12 @@
                 }
                 // If all nodes where deleted, create a placeholder element.
                 if (!this.dragRootEl.find(this.options.itemNodeName).length)
-                     {
+           {
                     this.dragRootEl.append('<div class="' + this.options.emptyClass + '"/>');
                 }
             }
-                else
-                {
+        else
+        {
                 this.placeEl.replaceWith(el);
             }
 
@@ -489,7 +500,8 @@
                         sourceEl   : el,
                         destParent : parentItem,
                         destRoot   : el.closest('.' + this.options.rootClass),
-                        sourceRoot : this.sourceRoot
+                        sourceRoot : this.sourceRoot,
+                        moving     : this.moving
                   };
                   this.options.dropCallback.call(this, details);
                 }
