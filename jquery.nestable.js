@@ -26,29 +26,29 @@
         return !!supports;
     })();
 
-	var eStart  = hasTouch ? 'touchstart'  : 'mousedown',
-		 eMove   = hasTouch ? 'touchmove'   : 'mousemove',
-	  	 eEnd    = hasTouch ? 'touchend'    : 'mouseup',
-	  	 eCancel = hasTouch ? 'touchcancel' : 'mouseup';
+    var eStart  = hasTouch ? 'touchstart'  : 'mousedown',
+        eMove   = hasTouch ? 'touchmove'   : 'mousemove',
+        eEnd    = hasTouch ? 'touchend'    : 'mouseup',
+        eCancel = hasTouch ? 'touchcancel' : 'mouseup';
 
-	var defaults = {
-		listNodeName    : 'ol',
-		itemNodeName    : 'li',
-		rootClass       : 'dd',
-		listClass       : 'dd-list',
-		itemClass       : 'dd-item',
-		dragClass       : 'dd-dragel',
-		handleClass     : 'dd-handle',
-		collapsedClass  : 'dd-collapsed',
-		placeClass      : 'dd-placeholder',
-		noDragClass     : 'dd-nodrag',
-		noChildrenClass : 'dd-nochildren',
-		emptyClass      : 'dd-empty',
-		expandBtnHTML   : '<button data-action="expand" type="button">Expand</button>',
-		collapseBtnHTML : '<button data-action="collapse" type="button">Collapse</button>',
-		group           : 0,
-		maxDepth        : 5,
-		threshold       : 20,
+    var defaults = {
+        listNodeName    : 'ol',
+        itemNodeName    : 'li',
+        rootClass       : 'dd',
+        listClass       : 'dd-list',
+        itemClass       : 'dd-item',
+        dragClass       : 'dd-dragel',
+        handleClass     : 'dd-handle',
+        collapsedClass  : 'dd-collapsed',
+        placeClass      : 'dd-placeholder',
+        noDragClass     : 'dd-nodrag',
+        noChildrenClass : 'dd-nochildren',
+        emptyClass      : 'dd-empty',
+        expandBtnHTML   : '<button data-action="expand" type="button">Expand</button>',
+        collapseBtnHTML : '<button data-action="collapse" type="button">Collapse</button>',
+        group           : 0,
+        maxDepth        : 5,
+        threshold       : 20,
 
         /**
          * Allows to start DnD operation on Tap-and-hold action, not immediately
@@ -66,19 +66,20 @@
         expandIfNeededCallback: null,
 
 
-    reject          : [],
-    //method for call when an item has been successfully dropped
-    //method has 1 argument in which sends an object containing all
-    //necessary details
-    dropCallback    : null,
-    // When a node is dragged it is moved to its new location.
-    // You can set the next option to true to create a copy of the node  that is dragged.
-    cloneNodeOnDrag   : false,
-    // When the node is dragged and released outside its list delete it.
-    dragOutsideToDelete : false,
-    //To be able to attach a generic callback function.
-    expandCallback : null
-  };
+        reject          : [],
+        //method for call when an item has been successfully dropped
+        //method has 1 argument in which sends an object containing all
+        //necessary details
+        dropCallback    : null,
+        // When a node is dragged it is moved to its new location.
+        // You can set the next option to true to create a copy of the node  that is dragged.
+        cloneNodeOnDrag   : false,
+        // When the node is dragged and released outside its list delete it.
+        dragOutsideToDelete : false,
+        //To be able to attach a generic callback functions in the expand/collapse event.
+        expandCallback : null,
+        collapseCallback : null
+    };
 
     function Plugin(element, options)
     {
@@ -233,7 +234,7 @@
                 list.el.off('click');
                 list.el.unbind('destroy-nestable');
 
-                list.el.data("nestable", null);
+                list.el.data('nestable', null);
 
                 var buttons = list.el[0].getElementsByTagName('button');
 
@@ -253,7 +254,7 @@
         {
             var data,
                 depth = 0,
-                list  = this;
+                list  = this,
                 step  = function(level, depth)
                 {
                     var array = [ ],
@@ -319,8 +320,8 @@
             {
                 var details = {
                     sourceEl : li,
-                    sourceId : li.data('id'),
-            };
+                    sourceId : li.data('id')
+	            };
                 this.options.expandCallback.call(this, details);
             }
         },
@@ -336,6 +337,14 @@
             }
             this.el.trigger('collapse', [li]);
             li.trigger('collapse');
+            if($.isFunction(this.options.collapseCallback))
+            {
+                var details = {
+                    sourceEl : li,
+                    sourceId : li.data('id')
+            	};
+                this.options.collapseCallback.call(this, details);
+            }
         },
 
         expandAll: function()
@@ -489,8 +498,9 @@
                 //Let's find out new parent id
                 var parentItem = el.parent().parent();
                 var parentId = null;
-                if(parentItem !== null && !parentItem.is('.' + this.options.rootClass))
+                if(parentItem !== null && !parentItem.is('.' + this.options.rootClass)){
                     parentId = parentItem.data('id');
+                }
 
                 if($.isFunction(this.options.dropCallback))
                 {
@@ -658,7 +668,7 @@
             if (!mouse.dirAx || isNewRoot || isEmpty) {
                 // check if groups match if dragging over new root
                 if (isNewRoot && opt.group !== pointElRoot.data('nestable-group')) {
-                    return;
+                  return;
                 }
                 // check depth limit
                 depth = this.dragDepth - 1 + this.pointEl.parents(opt.listNodeName).length;
@@ -701,10 +711,10 @@
             retval = this;
 
         var generateUid = function (separator) {
-            var delim = separator || "-";
+            var delim = separator || '-';
 
             function S4() {
-                return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+                return (((1 + Math.random()) * 0x10000) || 0).toString(16).substring(1);
             }
 
             return (S4() + S4() + delim + S4() + delim + S4() + delim + S4() + delim + S4() + S4() + S4());
@@ -712,11 +722,11 @@
 
         lists.each(function()
         {
-            var plugin = $(this).data("nestable");
+            var plugin = $(this).data('nestable');
 
             if (!plugin) {
-                $(this).data("nestable", new Plugin(this, params));
-                $(this).data("nestable-id", generateUid());
+                $(this).data('nestable', new Plugin(this, params));
+                $(this).data('nestable-id', generateUid());
             } else {
                 if (typeof params === 'string' && typeof plugin[params] === 'function') {
                     retval = plugin[params]();
